@@ -10,16 +10,16 @@ Status is Preview.
 *Deployed in response to Portal steward rejection: validators independently recompute and bind every state-bearing hash and clause snapshot.*
 
 - **DriftWatch V3**:
-  - Address: `PENDING_DEPLOY`
-  - Deploy Tx: `PENDING_DEPLOY`
-  - Source SHA-256: `PENDING_DEPLOY`
-  - Explorer: `https://explorer-studio.genlayer.com/address/PENDING_DEPLOY`
+  - Address: `0xf8D23c16B5655bE7dF9897dC76C1C576d4c68F85`
+  - Deploy Tx: `0xacbacb426db5a42176c98fce599902f6f320882d994a028975e7b1999d5cb1c7`
+  - Source SHA-256: `2a2d3ebde7563ba146de73ead1cbdc3b0b52e82cfc60eddce3a595a5ea4c428c`
+  - Explorer: [0xf8D23c16B5655bE7dF9897dC76C1C576d4c68F85](https://explorer-studio.genlayer.com/address/0xf8D23c16B5655bE7dF9897dC76C1C576d4c68F85)
 - **DriftGuard V3**:
-  - Address: `PENDING_DEPLOY`
-  - Deploy Tx: `PENDING_DEPLOY`
-  - Source SHA-256: `PENDING_DEPLOY`
-  - Explorer: `https://explorer-studio.genlayer.com/address/PENDING_DEPLOY`
-- **Deployed At**: `PENDING_DEPLOY`
+  - Address: `0x4D2123ac8Ceb59967B2009ab7A261C290348abC4`
+  - Deploy Tx: `0xbcbc3aab69f50dc5a1af97daed026fb9eb5da5ceec8533bb8f7a78eddfa8960b`
+  - Source SHA-256: `eb1b26aed095daf61ad1b94b1752d1636055965311543319d8fe214bc24863dc`
+  - Explorer: [0x4D2123ac8Ceb59967B2009ab7A261C290348abC4](https://explorer-studio.genlayer.com/address/0x4D2123ac8Ceb59967B2009ab7A261C290348abC4)
+- **Deployed At**: `2026-11-10T04:04:44.802Z`
 - **Status**: Active (Preview)
 
 ---
