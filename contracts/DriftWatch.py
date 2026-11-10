@@ -376,6 +376,26 @@ def validate_red_lines(red_lines_json: str) -> tuple[list[str], str]:
     return (sanitized, h)
 
 
+def state_view(
+    verdict: str,
+    gate: str,
+    norm_h: str,
+    raw_h: str,
+    clauses: list[str],
+    changes: list[dict],
+    tripwire: bool,
+) -> dict:
+    return {
+        "verdict": verdict,
+        "gate": gate,
+        "norm_hash": norm_h,
+        "raw_hash": raw_h,
+        "clauses": clauses,
+        "changes": changes,
+        "tripwire": tripwire,
+    }
+
+
 # ---------------------------------------------------------------------------
 _leader_extra = {}
 
@@ -676,12 +696,14 @@ class DriftWatch(gl.Contract):
             norm_clauses = [normalize_clause(c) for c in clauses]
             nh = norm_hash(norm_clauses)
             rw_hash = raw_hash(body_bytes)
+            sv = state_view("BASELINE", "BASELINE", nh, rw_hash, norm_clauses, [], False)
 
             return json.dumps({
                 "consensus_token": "BASELINE|" + nh[:16],
                 "norm_hash": nh,
                 "raw_hash": rw_hash,
                 "norm_clauses": norm_clauses,
+                "state_view": sv,
             }, sort_keys=True, separators=(",", ":"))
 
         def validator_fetch(leader_res) -> bool:
@@ -694,17 +716,35 @@ class DriftWatch(gl.Contract):
                 cleaned = page_text(body_bytes)
                 clauses = split_clauses(cleaned)
                 norm_clauses = [normalize_clause(c) for c in clauses]
-                my_token = "BASELINE|" + norm_hash(norm_clauses)[:16]
-                return my_token == ldata.get("consensus_token")
+                my_nh = norm_hash(norm_clauses)
+                my_rw_hash = raw_hash(body_bytes)
+                my_sv = state_view("BASELINE", "BASELINE", my_nh, my_rw_hash, norm_clauses, [], False)
+
+                if ldata.get("norm_hash") != my_nh:
+                    return False
+                if ldata.get("raw_hash") != my_rw_hash:
+                    return False
+                if ldata.get("norm_clauses") != norm_clauses:
+                    return False
+                if ldata.get("state_view") != my_sv:
+                    return False
+                return True
             except Exception:
                 return False
 
         result_json = gl.vm.run_nondet(leader_fetch, validator_fetch)
         res_data = json.loads(result_json)
 
+        # Defense-in-depth: independently recompute norm_hash from the returned norm_clauses
+        recomputed_bnh = norm_hash(res_data.get("norm_clauses", []))
+        if recomputed_bnh != res_data.get("norm_hash"):
+            raise gl.vm.UserError("baseline state inconsistent")
+        if res_data.get("state_view") and res_data["state_view"].get("norm_hash") != res_data.get("norm_hash"):
+            raise gl.vm.UserError("baseline state inconsistent")
+
         watch["status"] = "ACTIVE"
         watch["baseline_seq"] = "1"
-        watch["baseline_norm_hash"] = res_data["norm_hash"]
+        watch["baseline_norm_hash"] = recomputed_bnh
         watch["baseline_raw_hash"] = res_data["raw_hash"]
         watch["baseline_clauses"] = res_data["norm_clauses"]
         watch["baseline_check_id"] = ""
@@ -760,6 +800,7 @@ class DriftWatch(gl.Contract):
 
             # Gate 3: UNCHANGED
             if curr_raw_hash == baseline_raw_hash:
+                sv = state_view("UNCHANGED", "UNCHANGED", curr_norm_hash, curr_raw_hash, new_clauses, [], False)
                 return {
                     "verdict": "UNCHANGED",
                     "norm_hash": curr_norm_hash,
@@ -771,10 +812,12 @@ class DriftWatch(gl.Contract):
                     "tripwire": False,
                     "snapshot_clauses": new_clauses,
                     "consensus_token": "UNCHANGED|" + curr_norm_hash[:16],
+                    "state_view": sv,
                 }
 
             # Gate 4: COSMETIC
             if curr_norm_hash == baseline_norm_hash:
+                sv = state_view("COSMETIC", "COSMETIC", curr_norm_hash, curr_raw_hash, new_clauses, [], False)
                 return {
                     "verdict": "COSMETIC",
                     "norm_hash": curr_norm_hash,
@@ -786,11 +829,13 @@ class DriftWatch(gl.Contract):
                     "tripwire": False,
                     "snapshot_clauses": new_clauses,
                     "consensus_token": "COSMETIC|" + curr_norm_hash[:16],
+                    "state_view": sv,
                 }
 
             # Gate 5: Diff
             changes = clause_diff(baseline_clauses, new_clauses)
             if len(changes) > 12:
+                sv = state_view("REVIEW", "OVERFLOW", curr_norm_hash, curr_raw_hash, new_clauses, changes[:12], False)
                 return {
                     "verdict": "REVIEW",
                     "norm_hash": curr_norm_hash,
@@ -802,6 +847,7 @@ class DriftWatch(gl.Contract):
                     "tripwire": False,
                     "snapshot_clauses": new_clauses,
                     "consensus_token": "REVIEW|" + curr_norm_hash[:16],
+                    "state_view": sv,
                 }
 
             tripwire = injection_tripwire([c["new"] or c["old"] for c in changes])
@@ -846,6 +892,8 @@ class DriftWatch(gl.Contract):
             else:
                 verdict = decide(ch_labels, rl_flags, tripwire)
 
+            sv = state_view(verdict, "", curr_norm_hash, curr_raw_hash, new_clauses, changes, tripwire)
+
             return {
                 "verdict": verdict,
                 "norm_hash": curr_norm_hash,
@@ -857,6 +905,7 @@ class DriftWatch(gl.Contract):
                 "tripwire": tripwire,
                 "snapshot_clauses": new_clauses,
                 "consensus_token": verdict + "|" + curr_norm_hash[:16],
+                "state_view": sv,
             }
 
         def leader_run() -> str:
@@ -869,20 +918,53 @@ class DriftWatch(gl.Contract):
             try:
                 ldata = json.loads(leader_res.calldata)
                 my_eval = run_eval_pipeline()
-                return my_eval["consensus_token"] == ldata.get("consensus_token")
+                if ldata.get("verdict") != my_eval["verdict"]:
+                    return False
+                if ldata.get("gate") != my_eval["gate"]:
+                    return False
+                if ldata.get("norm_hash") != my_eval["norm_hash"]:
+                    return False
+                if ldata.get("raw_hash") != my_eval["raw_hash"]:
+                    return False
+                if ldata.get("snapshot_clauses") != my_eval["snapshot_clauses"]:
+                    return False
+                if ldata.get("changes") != my_eval["changes"]:
+                    return False
+                if ldata.get("tripwire") != my_eval["tripwire"]:
+                    return False
+                if ldata.get("state_view") != my_eval["state_view"]:
+                    return False
+                return True
             except Exception:
                 return False
 
         result_json = gl.vm.run_nondet(leader_run, validator_run)
         pipeline_data = json.loads(result_json)
         verdict = pipeline_data["verdict"]
-        norm_h = pipeline_data["norm_hash"]
+
+        # Defense-in-depth:
+        # 1. Recompute normalized snapshot clauses and their norm_hash
+        recomputed_norm_clauses = [normalize_clause(c) for c in pipeline_data.get("snapshot_clauses", [])]
+        recomputed_norm_h = norm_hash(recomputed_norm_clauses)
+        if recomputed_norm_h != pipeline_data.get("norm_hash"):
+            raise gl.vm.UserError("baseline state inconsistent")
+
+        # 2. Recompute clause diff if judged (gate == "")
+        gate_val = pipeline_data.get("gate", "")
+        if not gate_val:
+            recomputed_diff = clause_diff(baseline_clauses, pipeline_data.get("snapshot_clauses", []))
+            if recomputed_diff != pipeline_data.get("changes"):
+                raise gl.vm.UserError("baseline state inconsistent")
+
+        # 3. Check state_view consistency if present
+        if pipeline_data.get("state_view") and pipeline_data["state_view"].get("norm_hash") != recomputed_norm_h:
+            raise gl.vm.UserError("baseline state inconsistent")
+
         raw_h = pipeline_data["raw_hash"]
 
-        # Duplicate observation check: for gated checks (UNCHANGED / COSMETIC), differentiate by gate;
-        # for judged checks (gate == ""), key is sha256(wid|baseline_norm_hash|norm_h)
-        gate_val = pipeline_data["gate"]
-        key_body = f"{wid}|{baseline_norm_hash}|{norm_h}|{gate_val}" if gate_val else f"{wid}|{baseline_norm_hash}|{norm_h}"
+        # Duplicate observation check: for gated checks (UNCHANGED / COSMETIC / OVERFLOW), differentiate by gate;
+        # for judged checks (gate == ""), key is sha256(wid|baseline_norm_hash|recomputed_norm_h)
+        key_body = f"{wid}|{baseline_norm_hash}|{recomputed_norm_h}|{gate_val}" if gate_val else f"{wid}|{baseline_norm_hash}|{recomputed_norm_h}"
         obs_key = hashlib.sha256(key_body.encode("utf-8")).hexdigest()
         if obs_key in self.seen:
             existing_cid = self.seen[obs_key]
@@ -898,7 +980,7 @@ class DriftWatch(gl.Contract):
             "watch_id": wid,
             "caller": caller,
             "verdict": verdict,
-            "norm_hash": norm_h,
+            "norm_hash": recomputed_norm_h,
             "raw_hash16": raw_h[:16],
             "baseline_norm_hash": baseline_norm_hash,
             "redlines_hash": redlines_hash,
@@ -965,12 +1047,18 @@ class DriftWatch(gl.Contract):
         if chk.get("snapshot_dropped") == "true" or not chk.get("snapshot_clauses"):
             raise gl.vm.UserError("snapshot clauses no longer stored for this check")
 
+        # Defense: recompute norm_hash of normalized snapshot_clauses
+        recomputed_norm_clauses = [normalize_clause(c) for c in chk["snapshot_clauses"]]
+        recomputed_nh = norm_hash(recomputed_norm_clauses)
+        if recomputed_nh != chk.get("norm_hash"):
+            raise gl.vm.UserError("check snapshot does not match its recorded hash")
+
         # Advance baseline
         curr_bseq = int(watch.get("baseline_seq", "1"))
         watch["baseline_seq"] = str(curr_bseq + 1)
-        watch["baseline_norm_hash"] = chk["norm_hash"]
+        watch["baseline_norm_hash"] = recomputed_nh
         watch["baseline_raw_hash"] = ""
-        watch["baseline_clauses"] = [normalize_clause(c) for c in chk["snapshot_clauses"]]
+        watch["baseline_clauses"] = recomputed_norm_clauses
         watch["baseline_check_id"] = cid
 
         self.watches[wid] = json.dumps(watch, sort_keys=True, separators=(",", ":"))
