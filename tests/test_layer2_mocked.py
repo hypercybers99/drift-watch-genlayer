@@ -159,6 +159,20 @@ class TestLayer2Mocked(unittest.TestCase):
             self.watch.accept_change(wid, "1")
         self.assertEqual(str(ctx.exception), "cannot accept UNCHANGED check as baseline")
 
+        # 16. Check snapshot does not match its recorded hash on accept_change
+        wid_altered = self.watch.create_watch("Altered Watch", "https://acme.example/terms", self.redlines_json)
+        self.watch.set_baseline(wid_altered)
+        self.mock_web_content = self.v2_raw
+        self.watch.check(wid_altered)
+        c_list = json.loads(self.watch.by_watch[wid_altered])
+        t_cid = c_list[0]
+        c_altered = json.loads(self.watch.checks[t_cid])
+        c_altered["snapshot_clauses"] = ["Altered clause text"]
+        self.watch.checks[t_cid] = json.dumps(c_altered)
+        with self.assertRaises(gl.vm.UserError) as ctx:
+            self.watch.accept_change(wid_altered, t_cid)
+        self.assertEqual(str(ctx.exception), "check snapshot does not match its recorded hash")
+
     def test_gates_and_lifecycle(self):
         wid = self.watch.create_watch("Acme Watch", "https://acme.example/terms", self.redlines_json)
         self.watch.set_baseline(wid)
