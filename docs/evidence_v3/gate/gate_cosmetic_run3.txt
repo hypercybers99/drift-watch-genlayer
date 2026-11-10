@@ -1,0 +1,58 @@
+Fixture: COSMETIC (terms-v1-cosmetic.html)
+Run: 3
+Watch ID: 23
+Tx Hash: 0x27ef270377856969792eb2b41b1cebb1203ec7da57eee1df6294f19b3244d050
+Elapsed: 9.49s
+Receipt Status: ACCEPTED / MAJORITY_AGREE
+Leader Result: SUCCESS
+Leader Model: policy:prd-gemma
+Evaluated Verdict: COSMETIC
+Expected Verdict: COSMETIC
+Verdict Matches Expected: true
+Gate: COSMETIC
+Tripwire: false
+Norm Hash: e0c26d288fd485f95f178de36795757e28236963677a12721bf05dd4c96946c9
+Parsed Changes: []
+Parsed Redlines: []
+
+--- CHECK RECORD ---
+{
+  "baseline_norm_hash": "e0c26d288fd485f95f178de36795757e28236963677a12721bf05dd4c96946c9",
+  "caller": "0xf56027a31727c791e57b6ef5668df936abd6ab6d",
+  "change_labels": [],
+  "changes": [],
+  "gate": "COSMETIC",
+  "id": "23",
+  "norm_hash": "e0c26d288fd485f95f178de36795757e28236963677a12721bf05dd4c96946c9",
+  "raw_hash16": "708d368f8f190920",
+  "redline_flags": [],
+  "redlines_hash": "116eb689297f537839b93a86396ed22e6a65a104c05c01d352cc720eeea85439",
+  "schema_version": "1",
+  "seq": "23",
+  "snapshot_clauses": [
+    "\"Contact us at support@acme.example.\"",
+    "\"Welcome to Acme Notes terms of service.\"",
+    "\"By accessing our services you agree to these terms.\"",
+    "\"You must provide accurate registration information to open an account.\"",
+    "\"You are responsible for maintaining the confidentiality of your credentials.\"",
+    "\"We keep your notes for 30 days after you delete them.\"",
+    "\"We may share anonymized usage statistics with analytics providers.\"",
+    "\"We do not sell your personal data.\"",
+    "\"You can export or delete your data at any time.\"",
+    "\"You retain all ownership rights to your notes and uploaded documents.\"",
+    "\"We grant you a limited non-exclusive license to use the platform.\"",
+    "\"You agree not to reverse engineer or abuse the service infrastructure.\"",
+    "\"We may suspend accounts that violate our security policies or service integrity.\"",
+    "\"We implement reasonable administrative measures to protect stored customer content.\"",
+    "\"Service availability is provided on an as-is and as-available basis.\"",
+    "\"Our total aggregate liability is limited to the fees paid in the past twelve months.\"",
+    "\"Neither party is liable for indirect or consequential damages arising from service interruption.\"",
+    "\"Disputes are resolved in the courts of Delaware.\"",
+    "\"These terms constitute the entire agreement between you and Acme Notes.\"",
+    "\"We will notify you of material changes before they become effective.\""
+  ],
+  "snapshot_dropped": "false",
+  "tripwire": "false",
+  "verdict": "COSMETIC",
+  "watch_id": "23"
+}

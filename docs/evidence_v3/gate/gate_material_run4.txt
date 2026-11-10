@@ -1,0 +1,71 @@
+Fixture: MATERIAL (terms-v2-subtle.md)
+Run: 4
+Watch ID: 4
+Tx Hash: 0xcc06c14abd1392949bc2e647bb998eef4ad6346169a12ac9b1da48acd8b0a911
+Elapsed: 13.59s
+Receipt Status: ACCEPTED / MAJORITY_AGREE
+Leader Result: SUCCESS
+Leader Model: policy:prd-sonnet
+Evaluated Verdict: MATERIAL
+Expected Verdict: MATERIAL
+Verdict Matches Expected: true
+Gate: none
+Tripwire: false
+Norm Hash: ba4e6ecc0e4cbe0711d4e21439926a6c6442bb400037859357fc2cc27535a0ab
+Parsed Changes: ["MATERIAL"]
+Parsed Redlines: ["HIT","CLEAR","CLEAR","UNCLEAR"]
+
+--- CHECK RECORD ---
+{
+  "baseline_norm_hash": "e0c26d288fd485f95f178de36795757e28236963677a12721bf05dd4c96946c9",
+  "caller": "0xf56027a31727c791e57b6ef5668df936abd6ab6d",
+  "change_labels": [
+    "MATERIAL"
+  ],
+  "changes": [
+    {
+      "kind": "MODIFIED",
+      "new": "We may share usage statistics with analytics providers.",
+      "old": "we may share anonymized usage statistics with analytics providers"
+    }
+  ],
+  "gate": "",
+  "id": "4",
+  "norm_hash": "ba4e6ecc0e4cbe0711d4e21439926a6c6442bb400037859357fc2cc27535a0ab",
+  "raw_hash16": "b60b5adfa05e9a24",
+  "redline_flags": [
+    "HIT",
+    "CLEAR",
+    "CLEAR",
+    "UNCLEAR"
+  ],
+  "redlines_hash": "116eb689297f537839b93a86396ed22e6a65a104c05c01d352cc720eeea85439",
+  "schema_version": "1",
+  "seq": "4",
+  "snapshot_clauses": [
+    "Welcome to Acme Notes terms of service.",
+    "By accessing our services you agree to these terms.",
+    "You must provide accurate registration information to open an account.",
+    "You are responsible for maintaining the confidentiality of your credentials.",
+    "We keep your notes for 30 days after you delete them.",
+    "We may share usage statistics with analytics providers.",
+    "We do not sell your personal data.",
+    "You can export or delete your data at any time.",
+    "You retain all ownership rights to your notes and uploaded documents.",
+    "We grant you a limited non-exclusive license to use the platform.",
+    "You agree not to reverse engineer or abuse the service infrastructure.",
+    "We may suspend accounts that violate our security policies or service integrity.",
+    "We implement reasonable administrative measures to protect stored customer content.",
+    "Service availability is provided on an as-is and as-available basis.",
+    "Our total aggregate liability is limited to the fees paid in the past twelve months.",
+    "Neither party is liable for indirect or consequential damages arising from service interruption.",
+    "Disputes are resolved in the courts of Delaware.",
+    "These terms constitute the entire agreement between you and Acme Notes.",
+    "We will notify you of material changes before they become effective.",
+    "Contact us at support@acme.example."
+  ],
+  "snapshot_dropped": "false",
+  "tripwire": "false",
+  "verdict": "MATERIAL",
+  "watch_id": "4"
+}

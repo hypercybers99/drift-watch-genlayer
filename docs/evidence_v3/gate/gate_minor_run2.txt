@@ -1,0 +1,71 @@
+Fixture: MINOR (terms-v6-salami1.md)
+Run: 2
+Watch ID: 12
+Tx Hash: 0x2ec166f789ab7245956b81a94b883b39df48387f6287dbea406f4d800ae2ec4c
+Elapsed: 55.70s
+Receipt Status: ACCEPTED / MAJORITY_AGREE
+Leader Result: SUCCESS
+Leader Model: policy:prd-glm
+Evaluated Verdict: MINOR
+Expected Verdict: MINOR
+Verdict Matches Expected: true
+Gate: none
+Tripwire: false
+Norm Hash: c5ab6d5273fc66c833759527e85a03946144d9c296af36ae062f982d4048fd9b
+Parsed Changes: ["MINOR"]
+Parsed Redlines: ["CLEAR","CLEAR","CLEAR","CLEAR"]
+
+--- CHECK RECORD ---
+{
+  "baseline_norm_hash": "e0c26d288fd485f95f178de36795757e28236963677a12721bf05dd4c96946c9",
+  "caller": "0xf56027a31727c791e57b6ef5668df936abd6ab6d",
+  "change_labels": [
+    "MINOR"
+  ],
+  "changes": [
+    {
+      "kind": "MODIFIED",
+      "new": "We keep your notes for 60 days after you delete them.",
+      "old": "we keep your notes for 30 days after you delete them"
+    }
+  ],
+  "gate": "",
+  "id": "12",
+  "norm_hash": "c5ab6d5273fc66c833759527e85a03946144d9c296af36ae062f982d4048fd9b",
+  "raw_hash16": "782cec0120ce98ac",
+  "redline_flags": [
+    "CLEAR",
+    "CLEAR",
+    "CLEAR",
+    "CLEAR"
+  ],
+  "redlines_hash": "116eb689297f537839b93a86396ed22e6a65a104c05c01d352cc720eeea85439",
+  "schema_version": "1",
+  "seq": "12",
+  "snapshot_clauses": [
+    "Welcome to Acme Notes terms of service.",
+    "By accessing our services you agree to these terms.",
+    "You must provide accurate registration information to open an account.",
+    "You are responsible for maintaining the confidentiality of your credentials.",
+    "We keep your notes for 60 days after you delete them.",
+    "We may share anonymized usage statistics with analytics providers.",
+    "We do not sell your personal data.",
+    "You can export or delete your data at any time.",
+    "You retain all ownership rights to your notes and uploaded documents.",
+    "We grant you a limited non-exclusive license to use the platform.",
+    "You agree not to reverse engineer or abuse the service infrastructure.",
+    "We may suspend accounts that violate our security policies or service integrity.",
+    "We implement reasonable administrative measures to protect stored customer content.",
+    "Service availability is provided on an as-is and as-available basis.",
+    "Our total aggregate liability is limited to the fees paid in the past twelve months.",
+    "Neither party is liable for indirect or consequential damages arising from service interruption.",
+    "Disputes are resolved in the courts of Delaware.",
+    "These terms constitute the entire agreement between you and Acme Notes.",
+    "We will notify you of material changes before they become effective.",
+    "Contact us at support@acme.example."
+  ],
+  "snapshot_dropped": "false",
+  "tripwire": "false",
+  "verdict": "MINOR",
+  "watch_id": "12"
+}
