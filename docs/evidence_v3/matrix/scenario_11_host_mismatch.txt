@@ -1,0 +1,15 @@
+Scenario: 11 - host_mismatch
+Description: update_source with different hostname triggers revert
+Tx Hash: 0x35f865162c8dc096aa78acc4c8242f333e2b05c76e09a98a4cbba518d5957952
+Elapsed: 17.06s
+Status: ACCEPTED / MAJORITY_AGREE
+Leader Result: ERROR
+Evaluated Verdict: host mismatch: new URL host must match existing host
+Expected: host mismatch: new URL host must match existing host
+Matches Expected: true
+
+--- DETAILS ---
+{
+  "leaderRes": "ERROR",
+  "error": "host mismatch: new URL host must match existing host"
+}

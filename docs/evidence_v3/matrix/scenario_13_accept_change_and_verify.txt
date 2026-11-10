@@ -1,0 +1,85 @@
+Scenario: 13 - accept_change_and_verify
+Description: accept_change advances baseline, subsequent check verifies against new baseline
+Tx Hash: 0x5eddd6952be1be8b5a905c130325f13c021d92bd68f8b05de14c11551eaaf067
+Elapsed: 27.62s
+Status: ACCEPTED / MAJORITY_AGREE
+Leader Result: SUCCESS
+Evaluated Verdict: baseline_seq=2, next_verdict=COSMETIC
+Expected: baseline_seq=2, next_verdict=COSMETIC (gate=COSMETIC)
+Matches Expected: true
+
+--- DETAILS ---
+{
+  "watch": {
+    "baseline_check_id": "38",
+    "baseline_norm_hash": "8e9b04a01e8c16a89304d6c86e911853ea7f9ee460852718524472a2a4e38f08",
+    "baseline_raw_hash": "",
+    "baseline_seq": "2",
+    "host": "raw.githubusercontent.com",
+    "id": "31",
+    "name": "Matrix Lifecycle Watch",
+    "owner": "0xf56027a31727c791e57b6ef5668df936abd6ab6d",
+    "red_lines": [
+      "Must not allow sharing of identifiable or non-anonymized user data with third parties.",
+      "Must not keep deleted user data for more than 90 days.",
+      "Must keep the right of users to export or delete their data.",
+      "Must not permit selling personal data."
+    ],
+    "redlines_hash": "116eb689297f537839b93a86396ed22e6a65a104c05c01d352cc720eeea85439",
+    "schema_version": "1",
+    "seq": "31",
+    "source_history": [
+      "https://raw.githubusercontent.com/hypercybers99/drift-watch-fixtures/c8ff0f0cf8b5e406a44baad04867cb793c52d328/terms-v0.md",
+      "https://raw.githubusercontent.com/hypercybers99/drift-watch-fixtures/c8ff0f0cf8b5e406a44baad04867cb793c52d328/terms-v0.md",
+      "https://raw.githubusercontent.com/hypercybers99/drift-watch-fixtures/c8ff0f0cf8b5e406a44baad04867cb793c52d328/terms-v1-cosmetic.html",
+      "https://raw.githubusercontent.com/hypercybers99/drift-watch-fixtures/c8ff0f0cf8b5e406a44baad04867cb793c52d328/terms-v2-subtle.md",
+      "https://raw.githubusercontent.com/hypercybers99/drift-watch-fixtures/c8ff0f0cf8b5e406a44baad04867cb793c52d328/terms-v3-obvious.md",
+      "https://raw.githubusercontent.com/hypercybers99/drift-watch-fixtures/c8ff0f0cf8b5e406a44baad04867cb793c52d328/terms-v4-injection.md",
+      "https://raw.githubusercontent.com/hypercybers99/drift-watch-fixtures/c8ff0f0cf8b5e406a44baad04867cb793c52d328/terms-v5-harmless.md",
+      "https://raw.githubusercontent.com/hypercybers99/drift-watch-fixtures/c8ff0f0cf8b5e406a44baad04867cb793c52d328/terms-v6-salami1.md",
+      "https://raw.githubusercontent.com/hypercybers99/drift-watch-fixtures/c8ff0f0cf8b5e406a44baad04867cb793c52d328/terms-v7-salami2.md"
+    ],
+    "status": "ACTIVE",
+    "url": "https://raw.githubusercontent.com/hypercybers99/drift-watch-fixtures/c8ff0f0cf8b5e406a44baad04867cb793c52d328/terms-v7-salami2.md"
+  },
+  "latestCheck": {
+    "baseline_norm_hash": "8e9b04a01e8c16a89304d6c86e911853ea7f9ee460852718524472a2a4e38f08",
+    "caller": "0xf56027a31727c791e57b6ef5668df936abd6ab6d",
+    "change_labels": [],
+    "changes": [],
+    "gate": "COSMETIC",
+    "id": "39",
+    "norm_hash": "8e9b04a01e8c16a89304d6c86e911853ea7f9ee460852718524472a2a4e38f08",
+    "raw_hash16": "1b01f10827702784",
+    "redline_flags": [],
+    "redlines_hash": "116eb689297f537839b93a86396ed22e6a65a104c05c01d352cc720eeea85439",
+    "schema_version": "1",
+    "seq": "39",
+    "snapshot_clauses": [
+      "Welcome to Acme Notes terms of service.",
+      "By accessing our services you agree to these terms.",
+      "You must provide accurate registration information to open an account.",
+      "You are responsible for maintaining the confidentiality of your credentials.",
+      "We keep your notes for 100 days after you delete them.",
+      "We may share anonymized usage statistics with analytics and marketing providers.",
+      "We do not sell your personal data.",
+      "You can export or delete your data at any time.",
+      "You retain all ownership rights to your notes and uploaded documents.",
+      "We grant you a limited non-exclusive license to use the platform.",
+      "You agree not to reverse engineer or abuse the service infrastructure.",
+      "We may suspend accounts that violate our security policies or service integrity.",
+      "We implement reasonable administrative measures to protect stored customer content.",
+      "Service availability is provided on an as-is and as-available basis.",
+      "Our total aggregate liability is limited to the fees paid in the past twelve months.",
+      "Neither party is liable for indirect or consequential damages arising from service interruption.",
+      "Disputes are resolved in the courts of Delaware.",
+      "These terms constitute the entire agreement between you and Acme Notes.",
+      "We will notify you of material changes before they become effective.",
+      "Contact us at support@acme.example."
+    ],
+    "snapshot_dropped": "false",
+    "tripwire": "false",
+    "verdict": "COSMETIC",
+    "watch_id": "31"
+  }
+}

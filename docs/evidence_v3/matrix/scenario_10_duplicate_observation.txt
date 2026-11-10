@@ -1,0 +1,15 @@
+Scenario: 10 - duplicate_observation
+Description: Calling check a second time with identical content triggers revert
+Tx Hash: 0x2e92c6a5e76006eb3aae16bafeb6044c0ef5069c698244934884f1e519e7596e
+Elapsed: 17.08s
+Status: ACCEPTED / MAJORITY_AGREE
+Leader Result: ERROR
+Evaluated Verdict: duplicate observation: already recorded in check 38
+Expected: duplicate observation: already recorded in check <cid>
+Matches Expected: true
+
+--- DETAILS ---
+{
+  "leaderRes": "ERROR",
+  "error": "duplicate observation: already recorded in check 38"
+}

@@ -1,0 +1,15 @@
+Scenario: 12 - 404_url
+Description: set_baseline on nonexistent URL triggers HTTP status revert
+Tx Hash: 0x193042d54e43ad02ead179061e531e1601a5610a16987165b44955b23d7827a1
+Elapsed: 24.62s
+Status: ACCEPTED / MAJORITY_AGREE
+Leader Result: ERROR
+Evaluated Verdict: HTTP status not 200: 404
+Expected: HTTP status not 200: 404 or source unreachable
+Matches Expected: true
+
+--- DETAILS ---
+{
+  "leaderRes": "ERROR",
+  "error": "HTTP status not 200: 404"
+}

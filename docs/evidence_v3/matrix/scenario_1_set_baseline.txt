@@ -1,0 +1,35 @@
+Scenario: 1 - set_baseline
+Description: Set initial baseline on terms-v0.md
+Tx Hash: 0xee39245ec9ae0626353a477a694e26ff27e714ea0cedc22b671535d8636e65ee
+Elapsed: 52.61s
+Status: ACCEPTED / MAJORITY_AGREE
+Leader Result: SUCCESS
+Evaluated Verdict: BASELINE_SET
+Expected: BASELINE_SET
+Matches Expected: true
+
+--- DETAILS ---
+{
+  "baseline_check_id": "",
+  "baseline_norm_hash": "e0c26d288fd485f95f178de36795757e28236963677a12721bf05dd4c96946c9",
+  "baseline_raw_hash": "ae41899b3f2d782dba053de7360bd2679639f03cd8a012c48b6d1a9c6d0ce7c9",
+  "baseline_seq": "1",
+  "host": "raw.githubusercontent.com",
+  "id": "31",
+  "name": "Matrix Lifecycle Watch",
+  "owner": "0xf56027a31727c791e57b6ef5668df936abd6ab6d",
+  "red_lines": [
+    "Must not allow sharing of identifiable or non-anonymized user data with third parties.",
+    "Must not keep deleted user data for more than 90 days.",
+    "Must keep the right of users to export or delete their data.",
+    "Must not permit selling personal data."
+  ],
+  "redlines_hash": "116eb689297f537839b93a86396ed22e6a65a104c05c01d352cc720eeea85439",
+  "schema_version": "1",
+  "seq": "31",
+  "source_history": [
+    "https://raw.githubusercontent.com/hypercybers99/drift-watch-fixtures/c8ff0f0cf8b5e406a44baad04867cb793c52d328/terms-v0.md"
+  ],
+  "status": "ACTIVE",
+  "url": "https://raw.githubusercontent.com/hypercybers99/drift-watch-fixtures/c8ff0f0cf8b5e406a44baad04867cb793c52d328/terms-v0.md"
+}

@@ -1,0 +1,51 @@
+Scenario: 14 - drift_guard_lifecycle
+Description: DriftGuard pin, is_safe, is_safe_for, acknowledge, and repin verification
+Tx Hash: 0x309ad89a1a54d4cc03c58b76f37b4c3bcf15c518c66804e8a074bba6d37823ed
+Elapsed: 156.76s
+Status: ACCEPTED / MAJORITY_AGREE
+Leader Result: SUCCESS
+Evaluated Verdict: GUARD_LIFECYCLE_VERIFIED
+Expected: GUARD_LIFECYCLE_VERIFIED
+Matches Expected: true
+
+--- DETAILS ---
+{
+  "safeBefore": {
+    "latest_check_id": "",
+    "latest_verdict": "",
+    "reason": "NO_CHECK_YET",
+    "safe": "false"
+  },
+  "safeAlarm": {
+    "latest_check_id": "41",
+    "latest_verdict": "MATERIAL",
+    "reason": "ALARM",
+    "safe": "false"
+  },
+  "isSafeForAlarm": false,
+  "safeAck": {
+    "latest_check_id": "41",
+    "latest_verdict": "MATERIAL",
+    "reason": "ACKNOWLEDGED",
+    "safe": "true"
+  },
+  "safeBchange": {
+    "latest_check_id": "41",
+    "latest_verdict": "MATERIAL",
+    "reason": "BASELINE_CHANGED",
+    "safe": "false"
+  },
+  "safeRepinBeforeCheck": {
+    "latest_check_id": "41",
+    "latest_verdict": "MATERIAL",
+    "reason": "ALARM",
+    "safe": "false"
+  },
+  "checkAfterRepinTx": "0x8be103b4b8e98a52c27e3a12f94edaff3d5c70d1e1ae6cacdd30b94590e4700d",
+  "safeAfterRepinCheck": {
+    "latest_check_id": "42",
+    "latest_verdict": "COSMETIC",
+    "reason": "OK",
+    "safe": "true"
+  }
+}
