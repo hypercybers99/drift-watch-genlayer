@@ -32,6 +32,8 @@ This document catalogs every user-facing failure condition implemented in `Drift
 | Check mismatch on accept | `check does not belong to this watch` | Calling `accept_change` with a `check_id` that belongs to a different watch. |
 | Unchanged check accept | `cannot accept UNCHANGED check as baseline` | Calling `accept_change` on a check whose recorded verdict is `UNCHANGED`. |
 | Pruned snapshot accept | `snapshot clauses no longer stored for this check` | Calling `accept_change` on an older check whose `snapshot_clauses` were pruned beyond retention of 3. |
+| Proposal state mismatch | `baseline state inconsistent` | Post-consensus proposal validation fails defense-in-depth recomputations (`norm_hash` or `clause_diff`). |
+| Corrupted snapshot accept | `check snapshot does not match its recorded hash` | Calling `accept_change` on a check whose normalized snapshot clauses do not hash to `chk["norm_hash"]`. |
 
 ## DriftGuard UserErrors
 

@@ -41,6 +41,8 @@ Executes an on-demand check of the current page against the pinned baseline and 
 Advances the baseline to the clause snapshot captured in `check_id`.
 - **Access**: Owner only.
 - Requires that `check_id` belongs to `watch_id`, verdict is not `UNCHANGED`, and snapshot clauses are still stored.
+- **Hash Verification**: Recomputes `norm_hash(snapshot_clauses)` and requires exact equality with `chk["norm_hash"]`. If mismatched, raises `UserError("check snapshot does not match its recorded hash")`.
+- **Proposal Validation**: Post-consensus proposal validation asserts equality with recomputed pipeline state, raising `UserError("baseline state inconsistent")` on any mismatch.
 
 #### `update_source(watch_id: str, new_url: str) -> None`
 Updates the monitored URL on the same host (e.g. following URL migrations or version paths).

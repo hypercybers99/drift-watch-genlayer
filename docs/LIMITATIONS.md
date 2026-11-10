@@ -35,3 +35,11 @@ This document provides a comprehensive, honest catalog of known technical and ar
 - **Host Binding on Source Updates**: `update_source` requires exact parsed host identity (case-insensitive, subdomains are distinct). It allows URL path updates on the same host but relies on the watch owner not pointing to an unrelated resource on that same host.
 - **Snapshot Retention Limit**: Detailed clause snapshots (`snapshot_clauses`) are retained only for the 3 newest checks to bound on-chain storage growth. Older checks retain hashes, diff summaries, and metadata, but their snapshots are pruned (`snapshot_dropped: "true"`).
 - **Guard Reports Stored State**: `DriftGuard.is_safe` evaluates the latest recorded check in `DriftWatch`. If a terms page changed upstream but nobody called `check`, the guard reflects the last recorded state.
+
+## 7. Full Validator State Binding & Deterministic Source Byte Identity (V3)
+- **Identical Raw Bytes Across Validators**:
+  Because V3 requires validators to independently agree on the full 64-hex `raw_hash` and full 64-hex `norm_hash`, monitored web pages must return byte-identical HTTP response payloads across independent validator fetches.
+  Commit-pinned raw files (such as GitHub raw URLs with specific commit SHAs) satisfy this requirement.
+  Dynamic websites returning randomized nonces, timestamps, CSRF tokens, or session IDs in the page text will cause validator fetches to yield different hashes and fail closed with validator disagreement (`validator disagreed with leader`), preventing baseline corruption.
+- **Leader-Attested Labels vs. Derived Verdict Consensus**:
+  The underlying `change_labels` and `redline_flags` arrays emitted by LLM evaluators are leader-attested metadata and are not verified across validators. While the derived `verdict` and all deterministic state fields are strictly bound by consensus, integrators inspecting `change_labels` or `redline_flags` in historical check records should treat them as leader-reported annotations.

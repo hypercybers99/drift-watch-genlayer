@@ -3,33 +3,65 @@
 Status: Preview (Studionet)  
 Network: Studionet (Chain ID: 61999)  
 
-## 1. The Consensus Primitive
+## 1. The Consensus Primitive & Full Validator State Binding (V3)
 
-In GenLayer, validators execute non-deterministic operations in parallel and must agree on a shared transaction result. Language models produce slight lexical variations, formatting variance, and non-deterministic secondary explanations across different runs or validator nodes. 
+In GenLayer, validators execute non-deterministic operations in parallel and must agree on a shared transaction result. Language models produce slight lexical variations, formatting variance, and non-deterministic secondary explanations across different runs or validator nodes.
 
-If validators attempted to compare raw model prose, explanations, or complex nested JSON payloads, consensus would frequently fail despite semantic agreement.
+### V2 Limitations (Portal Steward Rejection)
+In V2, validators verified only a short consensus string (`<VERDICT>|<norm_hash16>`) or (`BASELINE|<norm_hash16>`), trusting the leader's full 64-hex hashes and clause snapshots. Because full hashes and snapshots were not verified by validators, altered proposals could pass consensus and later be advanced to baseline state.
 
-### What Validators Compare
-For `check`, the consensus function passed to `gl.eq_principle.strict_eq` returns strictly ONE short canonical string:
+### V3 Full State Binding Architecture
+In V3, validators independently execute the deterministic evaluation pipeline and verify full equality of all state-bearing fields before accepting any proposal:
+
+```python
+def state_view(
+    verdict: str,
+    gate: str,
+    norm_h: str,
+    raw_h: str,
+    clauses: list[str],
+    changes: list[dict],
+    tripwire: bool,
+) -> dict:
+    return {
+        "verdict": verdict,
+        "gate": gate,
+        "norm_hash": norm_h,
+        "raw_hash": raw_h,
+        "clauses": clauses,
+        "changes": changes,
+        "tripwire": tripwire,
+    }
 ```
-<VERDICT>|<norm_hash16>
-```
-Where:
-- `VERDICT` is exactly one of the 6 canonical enum strings: `UNCHANGED`, `COSMETIC`, `NONE`, `MINOR`, `MATERIAL`, or `REVIEW`.
-- `norm_hash16` is the first 16 hexadecimal characters of `norm_hash` (the SHA-256 hash of the sorted, normalized clauses of the document fetched by that validator).
 
-For `set_baseline`, the function returns:
-```
-BASELINE|<norm_hash16>
-```
+#### What Validators Compare in `set_baseline`:
+Validators independently fetch the web page, split clauses, normalize clauses, compute `norm_hash` and `raw_hash`, and require:
+1. `ldata.get("norm_hash") == my_norm_hash` (full 64-hex SHA-256)
+2. `ldata.get("raw_hash") == my_raw_hash` (full 64-hex SHA-256)
+3. `ldata.get("norm_clauses") == my_norm_clauses` (exact element equality)
+4. `ldata.get("state_view") == my_state_view` (full canonical structure)
 
-### Why Both Verdict and Document Hash are in Consensus
-Validators must agree not only on the semantic verdict, but also on the *exact document state* they evaluated. If a network blip or intermediate CDN cache caused validator A to read an old version and validator B to read an updated version, their `norm_hash16` prefixes will diverge, correctly preventing consensus on an inconsistent state.
+#### What Validators Compare in `check`:
+Validators independently run the evaluation pipeline and require:
+1. `ldata.get("verdict") == my_eval["verdict"]`
+2. `ldata.get("gate") == my_eval["gate"]`
+3. `ldata.get("norm_hash") == my_eval["norm_hash"]` (full 64-hex SHA-256)
+4. `ldata.get("raw_hash") == my_eval["raw_hash"]` (full 64-hex SHA-256)
+5. `ldata.get("snapshot_clauses") == my_eval["snapshot_clauses"]` (exact element equality)
+6. `ldata.get("changes") == my_eval["changes"]` (exact diff structure equality)
+7. `ldata.get("tripwire") == my_eval["tripwire"]`
+8. `ldata.get("state_view") == my_eval["state_view"]`
 
-### What is Deliberately Left Out of Consensus
-- **Free-Form Model Rationales**: Free text explanations of *why* a change is material are never compared by validators.
-- **Per-Change Labels and Red-Line Flags**: The individual labels (`["MATERIAL"]`, `["HIT"]`) are captured by the leader and persisted in state as informational/leader-reported data. Validators reach consensus strictly on the single derived `VERDICT` produced by the deterministic `decide()` function.
-- **Document Layout and Section Ordering**: Document geography and formatting variations are filtered deterministically prior to consensus.
+#### Leader-Attested Metadata Rationale:
+`change_labels` and `redline_flags` produced by the LLM are leader-attested metadata and are NOT compared across validators.
+- Rationale: Frontier LLMs exhibit slight semantic variations on individual classification tags (e.g. MINOR vs NONE on edge phrasing), even when the derived verdict is identical.
+- Security Invariant: `change_labels` and `redline_flags` never feed downstream contract state or `DriftGuard`. All downstream state (baseline advancement, `DriftGuard` pin tracking, and observation duplicate detection) relies exclusively on consensus-verified fields (`norm_hash`, `snapshot_clauses`, and `verdict`).
+
+#### Defense-in-Depth Storage Verification:
+After consensus returns, the contract recomputes:
+- In `set_baseline`: recomputes `norm_hash(norm_clauses)` and asserts equality with `norm_hash`, raising `gl.vm.UserError("baseline state inconsistent")` on any mismatch.
+- In `check`: recomputes `norm_hash(snapshot_clauses)` and `clause_diff`, asserting equality before writing to storage, raising `gl.vm.UserError("baseline state inconsistent")` on any mismatch.
+- In `accept_change`: recomputes `norm_hash(snapshot_clauses)` and requires exact equality with `chk["norm_hash"]` before advancing the baseline, raising `gl.vm.UserError("check snapshot does not match its recorded hash")` on any mismatch.
 
 ---
 
