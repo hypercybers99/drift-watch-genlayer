@@ -153,7 +153,7 @@ async function main() {
 
   // 4. Test web.get against commit-pinned raw github markdown
   const fixtureSha = "c8ff0f0cf8b5e406a44baad04867cb793c52d328";
-  const rawMdUrl = `https://raw.githubusercontent.com/huzyow155/drift-watch-fixtures/${fixtureSha}/terms-v0.md`;
+  const rawMdUrl = `https://raw.githubusercontent.com/hypercybers99/drift-watch-fixtures/${fixtureSha}/terms-v0.md`;
   console.log("\n4. Testing web.get on commit-pinned raw markdown:", rawMdUrl);
   await runWrite("web_fetch_md", "probe_web_fetch", [rawMdUrl, "md_result"]);
   const mdResult = await client.readContract({
@@ -165,7 +165,7 @@ async function main() {
   results.mdResult = JSON.parse(mdResult);
 
   // 5. Test web.get against commit-pinned raw github HTML
-  const rawHtmlUrl = `https://raw.githubusercontent.com/huzyow155/drift-watch-fixtures/${fixtureSha}/terms-v1-cosmetic.html`;
+  const rawHtmlUrl = `https://raw.githubusercontent.com/hypercybers99/drift-watch-fixtures/${fixtureSha}/terms-v1-cosmetic.html`;
   console.log("\n5. Testing web.get on commit-pinned raw HTML:", rawHtmlUrl);
   await runWrite("web_fetch_html", "probe_web_fetch", [rawHtmlUrl, "html_result"]);
   const htmlResult = await client.readContract({
@@ -177,7 +177,7 @@ async function main() {
   results.htmlResult = JSON.parse(htmlResult);
 
   // 6. Test web.get against 404 URL
-  const notFoundUrl = `https://raw.githubusercontent.com/huzyow155/drift-watch-fixtures/${fixtureSha}/nonexistent-404.md`;
+  const notFoundUrl = `https://raw.githubusercontent.com/hypercybers99/drift-watch-fixtures/${fixtureSha}/nonexistent-404.md`;
   console.log("\n6. Testing web.get on 404 URL:", notFoundUrl);
   await runWrite("web_fetch_404", "probe_web_fetch", [notFoundUrl, "not_found_result"]);
   const notFoundResult = await client.readContract({

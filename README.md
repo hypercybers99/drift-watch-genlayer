@@ -3,7 +3,7 @@
 Status: Preview (Studionet)  
 Network: Studionet (Chain ID: 61999)  
 Explorer: [GenLayer Studionet Explorer](https://explorer-studio.genlayer.com)  
-Web dApp: [drift-watch-app](https://drift-watch-app-hyper-8cdf.vercel.app) ([Repository](https://github.com/huzyow155/drift-watch-app))  
+Web dApp: [drift-watch-app](https://drift-watch-app-hyper-8cdf.vercel.app) ([Repository](https://github.com/hypercybers99/drift-watch-app))  
 
 Drift Watch is an intelligent contract system for GenLayer that detects semantic policy drift in external web terms and policies. It sounds an alarm when the *meaning* of a monitored terms page changes against an integrator's explicit "red lines", while remaining silent when text formatting, layout, section order, or dates are altered.
 
@@ -117,4 +117,4 @@ Verdict variance exists across frontier models for boundary semantic classificat
 
 ## License
 
-MIT License - Copyright (c) 2026 Hyper (huzyow155). See [LICENSE](LICENSE) for details.
+MIT License - Copyright (c) 2026 Hyper (hypercybers99). See [LICENSE](LICENSE) for details.

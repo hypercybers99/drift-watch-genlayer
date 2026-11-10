@@ -5,7 +5,7 @@
 **RPC Endpoint**: `https://studio.genlayer.com/api`  
 **Explorer Base**: `https://explorer-studio.genlayer.com/address/`  
 **Execution Account (Throwaway)**: `0x332A3e3864B5D6098f3DD3E71560cca3718fD14E`  
-**Fixtures Repository**: `https://github.com/huzyow155/drift-watch-fixtures`  
+**Fixtures Repository**: `https://github.com/hypercybers99/drift-watch-fixtures`  
 **Fixtures Commit**: `c8ff0f0cf8b5e406a44baad04867cb793c52d328`  
 
 ---

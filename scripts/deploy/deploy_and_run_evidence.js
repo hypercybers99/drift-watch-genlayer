@@ -93,7 +93,7 @@ async function main() {
   });
 
   const commitSha = "c8ff0f0cf8b5e406a44baad04867cb793c52d328";
-  const baseUrl = `https://raw.githubusercontent.com/huzyow155/drift-watch-fixtures/${commitSha}`;
+  const baseUrl = `https://raw.githubusercontent.com/hypercybers99/drift-watch-fixtures/${commitSha}`;
 
   // Read redlines
   const redlinesPath = path.join(__dirname, '../../fixtures/redlines.json');
